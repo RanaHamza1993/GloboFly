@@ -113,7 +113,21 @@ class DestinationDetailActivity : AppCompatActivity() {
         btn_delete.setOnClickListener {
 
             // To be replaced by retrofit code
-            SampleData.deleteDestination(id)
+            val deleteService=ServiceBuilder.buildService(DestinationService::class.java)
+            val deleteRequest=deleteService.deleteDestination(id)
+            deleteRequest.enqueue(object :Callback<Unit>{
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                }
+
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+
+                    if(response.isSuccessful)
+                        Toasty.success(this@DestinationDetailActivity,"Destination deleted successfully",Toasty.LENGTH_SHORT,true).show()
+                    finish()
+                }
+
+            })
+            //SampleData.deleteDestination(id)
             finish() // Move back to DestinationListActivity
         }
     }
