@@ -5,7 +5,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.globofly.R
+import com.example.globofly.services.DestinationService
+import com.example.globofly.services.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_welcome.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -14,7 +19,20 @@ class WelcomeActivity : AppCompatActivity() {
 		setContentView(R.layout.activity_welcome)
 
 		// To be replaced by retrofit code
-		message.text = "Black Friday! Get 50% cash back on saving your first spot."
+		val messageService=ServiceBuilder.buildService(DestinationService::class.java)
+		val call: Call<String> =messageService.getMessages()
+		call.enqueue(object : Callback<String>{
+			override fun onFailure(call: Call<String>, t: Throwable) {
+
+			}
+
+			override fun onResponse(call: Call<String>, response: Response<String>) {
+				message.text = response.body()
+			}
+
+
+		})
+
 	}
 
 	fun getStarted(view: View) {

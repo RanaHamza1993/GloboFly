@@ -42,7 +42,7 @@ class DestinationListActivity : AppCompatActivity() {
         // To be replaced by retrofit code
 		val destinationService: DestinationService =ServiceBuilder.buildService(DestinationService::class.java)
         val filter=HashMap<String,String>()
-        filter["country"]="India"
+       // filter["country"]="India"
 		val requestCall: Call<List<Destination>> =destinationService.getDestinationList(filter)
 		requestCall.enqueue(object:Callback, retrofit2.Callback<List<Destination>> {
 			override fun onFailure(call: Call<List<Destination>>, t: Throwable) {
