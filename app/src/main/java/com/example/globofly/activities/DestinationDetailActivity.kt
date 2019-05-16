@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.globofly.R
 import com.example.globofly.models.Destination
 import com.example.globofly.services.DestinationService
 import com.example.globofly.services.ServiceBuilder
 import com.smartherd.globofly.helpers.SampleData
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -82,14 +84,27 @@ class DestinationDetailActivity : AppCompatActivity() {
             val country = et_country.text.toString()
 
             // To be replaced by retrofit code
-            val destination = Destination()
-            destination.id = id
-            destination.city = city
-            destination.description = description
-            destination.country = country
+            val updateService=ServiceBuilder.buildService(DestinationService::class.java)
 
-            SampleData.updateDestination(destination);
-            finish() // Move back to DestinationListActivity
+//            val destination = Destination()
+//            destination.id = id
+//            destination.city = city
+//            destination.description = description
+//            destination.country = country
+           val updateCall: Call<Destination> = updateService.updateDestination(id,city,description,country)
+            updateCall.enqueue(object : Callback<Destination> {
+                override fun onResponse(call: Call<Destination>, response: Response<Destination>) {
+                   if(response.isSuccessful)
+                    finish()
+                    Toasty.success(this@DestinationDetailActivity,"Destination updated successfully", Toast.LENGTH_SHORT,true).show()
+                }
+
+                override fun onFailure(call: Call<Destination>, t: Throwable) {
+                }
+
+            })
+           // SampleData.updateDestination(destination);
+           // Move back to DestinationListActivity
         }
     }
 

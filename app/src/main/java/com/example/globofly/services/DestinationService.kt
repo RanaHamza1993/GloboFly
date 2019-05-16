@@ -14,4 +14,13 @@ interface DestinationService {
     fun getMessages():Call<String>
     @POST("destination")
     fun addDestination(@Body destination: Destination):Call<Destination>
+//    @PUT("destination/{id}")
+//    fun updateDestination(@Path("id") id:Int,@Body destination: Destination):Call<Destination>
+    @FormUrlEncoded
+@PUT("destination/{id}")
+fun updateDestination(@Path("id") id:Int,
+                      @Field("city") city: String?,
+                      @Field("description") description:String?,
+                      @Field("country") country:String?):Call<Destination>
+
 }
